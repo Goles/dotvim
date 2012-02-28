@@ -44,3 +44,6 @@ map <leader>t :TlistToggle<cr>
 map <leader>ack :Ack 
 map <leader>an :cn<cr>
 map <leader>ap :cp<cr>
+
+""" solarized
+call togglebg#map("<F5>")

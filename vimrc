@@ -28,3 +28,6 @@ source $HOME/.vim/filetypes
 if has("gui_running")
     source $HOME/.vim/gui
 endif
+
+set background=light
+colorscheme solarized
