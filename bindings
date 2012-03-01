@@ -53,6 +53,9 @@ imap jj <esc>
  noremap  <Right> ""
  noremap! <Right> <Esc>
 
+"" Map control+tab to switch buffers in the same window (NG)
+map <C-tab> <C-w><C-w>
+
 "Use TAB to complete when typing words, else inserts TABs as usual.
 "Uses dictionary and source files to find matching words to complete.
 
