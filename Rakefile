@@ -26,7 +26,6 @@ namespace :update do
     :ack           => "http://www.vim.org/scripts/download_script.php?src_id=10433",
     :bufexplorer   => "http://www.vim.org/scripts/download_script.php?src_id=12904",
     :css_color     => "git://github.com/ap/vim-css-color.git",
-    :fugitive      => "git://github.com/tpope/vim-fugitive.git",
     :nerdcommenter => "git://github.com/scrooloose/nerdcommenter.git",
     :nerdtree      => "git://github.com/scrooloose/nerdtree.git",
     :processing    => "git://github.com/sophacles/vim-processing.git",

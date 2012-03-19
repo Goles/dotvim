@@ -2,7 +2,7 @@
 " Language:	Taskpaper (http://hogbaysoftware.com/projects/taskpaper)
 " Maintainer:	David O'Callaghan <david.ocallaghan@cs.tcd.ie>
 " URL:		https://github.com/davidoc/taskpaper.vim
-" Last Change:  2012-02-18
+" Last Change:  2012-02-20
 
 if exists("b:did_ftplugin")
     finish
@@ -22,14 +22,29 @@ if !exists('g:task_paper_archive_project')
     let g:task_paper_archive_project = "Archive"
 endif
 
+" When moving a task, should the cursor follow or stay in the same place
+" (default: follow)
+if !exists('g:task_paper_follow_move')
+    let g:task_paper_follow_move = 1 
+endif
+
+" Hide @done tasks when searching tags
+if !exists('g:task_paper_search_hide_done')
+    let g:task_paper_search_hide_done = 0 
+endif
+
 " Add '@' to keyword character set so that we can complete contexts as keywords
 setlocal iskeyword+=@-@
 
 " Tab character has special meaning on TaskPaper
 setlocal noexpandtab
 
-" Change 'comments' to continue to write a task item.
+" Change 'comments' and 'formatoptions' to continue to write a task item
 setlocal comments=b:-
+setlocal fo-=c fo+=rol
+
+" Set 'autoindent' to maintain indent level
+setlocal autoindent
 
 " Set up mappings
 if !exists("no_plugin_maps") && !exists("no_taskpaper_maps")
@@ -64,6 +79,8 @@ if !exists("no_plugin_maps") && !exists("no_taskpaper_maps")
     \       :call taskpaper#toggle_tag('done', taskpaper#date())<CR>
     nnoremap <silent> <buffer> <Plug>TaskPaperToggleToday
     \       :call taskpaper#toggle_tag('today', '')<CR>
+    nnoremap <silent> <buffer> <Plug>TaskPaperMoveToProject
+    \       :call taskpaper#move_to_project()<CR>
 
     nnoremap <silent> <buffer> <Plug>TaskPaperNewline
     \       o<C-r>=taskpaper#newline()<CR>
@@ -87,11 +104,12 @@ if !exists("no_plugin_maps") && !exists("no_taskpaper_maps")
     nmap <buffer> <Leader>td <Plug>TaskPaperToggleDone
     nmap <buffer> <Leader>tt <Plug>TaskPaperToggleToday
     nmap <buffer> <Leader>tx <Plug>TaskPaperToggleCancelled
+    nmap <buffer> <Leader>tm <Plug>TaskPaperMoveToProject
 
     if mapcheck("o", "n") == ''
         nmap <buffer> o <Plug>TaskPaperNewline
     endif
-    if mapcheck('\<CR>', "i") == ''
+    if mapcheck("\<CR>", "i") == ''
         imap <buffer> <CR> <Plug>TaskPaperNewline
     endif
 endif
