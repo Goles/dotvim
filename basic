@@ -14,7 +14,7 @@
 set nocompatible " to hell with vi compatibility!
 set wildmenu     " fancy command completion menu!
 set modelines=1  " enable modelines
-
+"set complete-=i  " http://stackoverflow.com/questions/915152/do-not-include-required-files-into-vim-omnicompletion
 " Miscellaneous Options. Values:
 "   a: ":read" sets window filename
 "   A: ":write" sets window filename
@@ -26,3 +26,6 @@ set modelines=1  " enable modelines
 "   W: refuse to overwrite a readonly file, even with :w!
 "   Z: don't reset 'readonly' when using :w!
 set cpoptions=aABceFsWZ
+
+""" fold column
+set foldcolumn=0

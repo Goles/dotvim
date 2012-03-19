@@ -47,3 +47,6 @@ map <leader>ap :cp<cr>
 
 """ solarized
 call togglebg#map("<F5>")
+
+""" fold column
+set foldcolumn=0
