@@ -14,7 +14,6 @@
 """   $ cd ~/.vim && rake update
 """
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " load up everything in ~/.vim/bundle using pathogen.vim
 call pathogen#runtime_append_all_bundles()
 

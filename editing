@@ -13,8 +13,8 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax on       " turn on syntax highlighting
 set number      " show line numbers
-set showbreak=+ " display a + at the beginning of a wrapped line
-set showmatch   " flash the matching bracket on inserting a )]} etc
+"set showbreak=+ " display a + at the beginning of a wrapped line
+"set showmatch   " flash the matching bracket on inserting a )]} etc
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -55,7 +55,7 @@ filetype plugin on    " Enable filetype-specific plugins
 set foldenable        " enable folding
 set foldmethod=indent " use the syntax definitions' folding
 set foldlevelstart=99 " start with all folds open when switching buffers
-set foldcolumn=3      " adds two columns of fold status on the left-hand
+"set foldcolumn=3      " adds two columns of fold status on the left-hand
                       " side of the screen
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
