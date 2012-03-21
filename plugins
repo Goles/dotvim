@@ -35,7 +35,10 @@ map <leader>a= :Tabularize /=>\?<cr>
 map <leader>a, :Tabularize /=>\?<cr>
 
 """ Taglist
-map <leader>t :TlistToggle<cr>
+" map <leader>t :TlistToggle<cr>
+
+""" Fuzzy Finder
+map <leader>p :FuzzyFinderTextMate<CR>
 
 """ ack
 map <leader>ack :Ack
@@ -44,3 +47,9 @@ map <leader>ap :cp<cr>
 
 """ solarized
 call togglebg#map("<F5>")
+
+""" Bufexplorer
+" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
+nnoremap <silent> <F11> :BufExplorer<CR>
+nnoremap <silent> <F12> :bn<CR>
+nnoremap <silent> <S-F12> :bp<CR>

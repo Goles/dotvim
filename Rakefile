@@ -30,9 +30,10 @@ namespace :update do
     :rails         => "git://github.com/tpope/vim-rails.git",
     :surround      => "git://github.com/tpope/vim-surround.git",
     :tabular       => "git://github.com/godlygeek/tabular",
-    :taglist       => "http://www.vim.org/scripts/download_script.php?src_id=7701",
     :taskpaper     => "git://github.com/davidoc/taskpaper.vim.git",
     :autoclose     => "git://github.com/Townk/vim-autoclose.git",
+    :command_t     => "git://github.com/wincent/Command-T.git",
+    :fuzzy_finder_pathogen => "git://github.com/itspriddle/vim-fuzzyfinder-pathogen.git",
 
     # syntax definitions
     :syntax_git       => "git://github.com/tpope/vim-git.git",

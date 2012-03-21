@@ -36,11 +36,11 @@ set expandtab     " no tabs, just spaces kthx.
 " file, which keeps overrides from being persistent
 autocmd FileType * set softtabstop=4 tabstop=4 shiftwidth=4 expandtab
 
-set list                     " show whitespace
-set listchars=tab:»·,trail:· " show tabs and trailing spaces
-set listchars+=extends:»     " show a » when a line goes off the right
+" set list                     " show whitespace
+" set listchars=tab:»·,trail:· " show tabs and trailing spaces
+" set listchars+=extends:»     " show a » when a line goes off the right
                              " edge of the screen
-set listchars+=precedes:«    " show a « when a line goes off the left
+" set listchars+=precedes:«    " show a « when a line goes off the left
                              " edge of the screen
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ F I L E T Y P E  O P T I O N S 
