@@ -32,8 +32,9 @@ namespace :update do
     :tabular       => "git://github.com/godlygeek/tabular",
     :taskpaper     => "git://github.com/davidoc/taskpaper.vim.git",
     :autoclose     => "git://github.com/Townk/vim-autoclose.git",
-    :command_t     => "git://github.com/wincent/Command-T.git",
-    :fuzzy_finder_pathogen => "git://github.com/itspriddle/vim-fuzzyfinder-pathogen.git",
+    :fuzzy_finder_pathogen => "git://github.com/itspriddle/vim-fuzzyfinder-pathogen.git", # TextMate-like Cmd-T
+    :autotag       => "git://github.com/vim-scripts/AutoTag.git",                         # Keep tags updated
+    :supertab      => "git://github.com/ervandew/supertab.git",                           # Completion
 
     # syntax definitions
     :syntax_git       => "git://github.com/tpope/vim-git.git",

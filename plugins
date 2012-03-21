@@ -34,11 +34,10 @@ map <leader>a= :Tabularize /=>\?<cr>
 " sets ,a, to align on commas (useful for stacked method calls, etc)
 map <leader>a, :Tabularize /=>\?<cr>
 
-""" Taglist
-" map <leader>t :TlistToggle<cr>
-
 """ Fuzzy Finder
 map <leader>p :FuzzyFinderTextMate<CR>
+let g:fuzzy_ignore = "*.png"
+let g:fuzzy_matching_limit = 50                            " Search limit
 
 """ ack
 map <leader>ack :Ack
