@@ -34,8 +34,12 @@ set statusline+=%=                        " right-align remainder
 set statusline+=0x%02B\                   " character hex value
 set statusline+=@\ L%l\ C%c\ (%P)\        " position in file
 
+" To display a greyed cursor line
+set cursorline
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ C O L O R   O P T I O N S
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " set background=dark " use colors suitable for dark backgrounds
 " colorscheme solarized
+set term=screen-256color

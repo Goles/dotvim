@@ -26,3 +26,4 @@ set hlsearch     " enable search highlight
 "   W: refuse to overwrite a readonly file, even with :w!
 "   Z: don't reset 'readonly' when using :w!
 set cpoptions=aABceFsWZ
+set clipboard=unnamed

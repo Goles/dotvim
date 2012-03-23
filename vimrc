@@ -24,10 +24,6 @@ source $HOME/.vim/window
 source $HOME/.vim/editing
 source $HOME/.vim/filetypes
 
-if has("gui_running")
-    source $HOME/.vim/gui
-endif
-
 syntax enable
 set background=light
 colorscheme solarized
