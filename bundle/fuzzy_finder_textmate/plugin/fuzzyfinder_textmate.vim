@@ -20,12 +20,10 @@ endfunction
 command! -bang -narg=? -complete=file   FuzzyFinderTextMate   call FuzzyFinderTextMateLauncher(<q-args>, len(<q-bang>))
 command! FuzzyFinderTextMateRefreshFiles ruby refresh_finder
 
-let s:file = expand('<sfile>:h')
-
 function! InstantiateTextMateMode() "{{{
 ruby << RUBY
   begin
-    require "#{VIM.evaluate('s:file')}/../ruby/fuzzy_file_finder"
+    require "#{ENV['HOME']}/.vim/bundle/fuzzyfinder_textmate/plugin/fuzzy_file_finder"
   rescue LoadError
     begin
       require 'rubygems'
@@ -78,7 +76,7 @@ ruby << RUBY
       fuzzy_roots = VIM.evaluate("g:fuzzy_roots")
       roots = fuzzy_roots.respond_to?(:split) ? fuzzy_roots.split("\n") : fuzzy_roots
       ceiling = VIM.evaluate("g:fuzzy_ceiling").to_i
-      ignore = VIM.evaluate("g:fuzzy_ignore").split(/[;,]/)
+      ignore = VIM.evaluate("g:fuzzy_ignore")
       FuzzyFileFinder.new(roots, ceiling, ignore)
     end
   end
