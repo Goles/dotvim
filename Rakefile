@@ -32,7 +32,7 @@ namespace :update do
     :tabular       => "git://github.com/godlygeek/tabular",
     :taskpaper     => "git://github.com/davidoc/taskpaper.vim.git",
     :autoclose     => "git://github.com/Townk/vim-autoclose.git",
-    #:fuzzy_finder_pathogen => "git://github.com/itspriddle/vim-fuzzyfinder-pathogen.git", # FuzzyFinder pathogen installer
+    #:fuzzy_finder  => "git://github.com/itspriddle/vim-fuzzyfinder-pathogen.git", # FuzzyFinder pathogen installer
     :fuzzy_finder_textmate => "git://github.com/sethbc/fuzzyfinder_textmate.git",         # Fuzzy-Finder text-mate like 
     :autotag       => "git://github.com/vim-scripts/AutoTag.git",                         # Keep tags updated
     :supertab      => "git://github.com/ervandew/supertab.git",                           # Completion

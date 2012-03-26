@@ -56,3 +56,9 @@ imap jj <esc>
 "" Map control+tab to switch buffers in the same window (NG)
 map <C-tab> <C-w><C-w>
 
+""" Tab mappings
+nnoremap <silent> <C-t> :tabnew<CR>
+nnoremap <silent> <C-[> :tabprevious<CR>
+nnoremap <silent> <C-]> :tabnext<CR>
+imap <C-t> <esc>:tabnew<CR>
+
