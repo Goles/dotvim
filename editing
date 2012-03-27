@@ -34,7 +34,8 @@ set expandtab     " no tabs, just spaces kthx.
 
 " Using autocmd for this allows it to be reset every time you open a
 " file, which keeps overrides from being persistent
-autocmd FileType * set softtabstop=4 tabstop=4 shiftwidth=4 expandtab
+" This makes tab switching very very slow, so I ended up disabling it.
+"autocmd FileType * set softtabstop=4 tabstop=4 shiftwidth=4 expandtab
 
 " set list                     " show whitespace
 " set listchars=tab:»·,trail:· " show tabs and trailing spaces
