@@ -40,8 +40,9 @@ map <TAB> za
 map <S-TAB> zA
 map <C-TAB> zR
 
-"" Map escape key to jj
-imap jj <esc>
+"" Map escape key to kj
+inoremap jk <Esc>
+inoremap kj <Esc>
 
 "" Disable the arrow keys! :D
  noremap  <Up> ""
@@ -60,5 +61,5 @@ map <C-tab> <C-w><C-w>
 nnoremap <silent> <C-t> :tabnew<CR>
 nnoremap <silent> <C-[> :tabprevious<CR>
 nnoremap <silent> <C-]> :tabnext<CR>
-imap <C-t> <esc>:tabnew<CR>
+inoremap <C-t> <esc>:tabnew<CR>
 

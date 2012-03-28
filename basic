@@ -27,6 +27,3 @@ set hlsearch     " enable search highlight
 "   Z: don't reset 'readonly' when using :w!
 set cpoptions=aABceFsWZ
 set clipboard=unnamed
-set notimeout
-set ttimeout
-set timeoutlen=50
