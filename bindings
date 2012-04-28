@@ -14,7 +14,7 @@
 let mapleader=',' " set leader to ,
 
 " format paragraphs (72 columns)
-map ^^ {!}par w72qrg<CR>
+"map ^^ {!}par w72qrg<CR>
 
 " one-stroke window maximizing
 map <C-H> <C-W>h<C-W><BAR>
@@ -32,34 +32,26 @@ map <leader>r :w<CR>:make %<CR>
 " shortcut to strip trailing whitespace
 map <leader>s :s/\s\+$//g<CR>
 
-" fold helpers:
-"   Tab: toggle fold state
-"   Shift-Tab: toggle state of outermost fold
-"   Ctrl-Tab: open all folds
-map <TAB> za
-map <S-TAB> zA
-map <C-TAB> zR
-
 "" Map escape key to kj
 inoremap jk <Esc>
 inoremap kj <Esc>
 
 "" Disable the arrow keys! :D
- noremap  <Up> ""
- noremap! <Up> <Esc>
- noremap  <Down> ""
- noremap! <Down> <Esc>
- noremap  <Left> ""
- noremap! <Left> <Esc>
- noremap  <Right> ""
- noremap! <Right> <Esc>
+noremap  <Up> ""
+noremap! <Up> <Esc>
+noremap  <Down> ""
+noremap! <Down> <Esc>
+noremap  <Left> ""
+noremap! <Left> <Esc>
+noremap  <Right> ""
+noremap! <Right> <Esc>
 
 "" Map control+tab to switch buffers in the same window (NG)
 map <C-tab> <C-w><C-w>
 
 """ Tab mappings
 nnoremap <silent> <C-t> :tabnew<CR>
-nnoremap <silent> <C-[> :tabprevious<CR>
-nnoremap <silent> <C-]> :tabnext<CR>
+nnoremap <silent> <C-h> :tabprevious<CR>
+nnoremap <silent> <C-l> :tabnext<CR>
 inoremap <C-t> <esc>:tabnew<CR>
 

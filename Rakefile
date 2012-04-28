@@ -29,13 +29,15 @@ namespace :update do
     :nerdcommenter => "git://github.com/scrooloose/nerdcommenter.git",
     :rails         => "git://github.com/tpope/vim-rails.git",
     :surround      => "git://github.com/tpope/vim-surround.git",
-    :tabular       => "git://github.com/godlygeek/tabular",
-    :taskpaper     => "git://github.com/davidoc/taskpaper.vim.git",
     :autoclose     => "git://github.com/Townk/vim-autoclose.git",
-    #:fuzzy_finder  => "git://github.com/itspriddle/vim-fuzzyfinder-pathogen.git", # FuzzyFinder pathogen installer
-    :fuzzy_finder_textmate => "git://github.com/sethbc/fuzzyfinder_textmate.git",         # Fuzzy-Finder text-mate like 
-    :autotag       => "git://github.com/vim-scripts/AutoTag.git",                         # Keep tags updated
-    :supertab      => "git://github.com/ervandew/supertab.git",                           # Completion
+    :fuzzy_finder_textmate => "git://github.com/sethbc/fuzzyfinder_textmate.git",  # Fuzzy-Finder text-mate like 
+    :autotag       => "git://github.com/vim-scripts/AutoTag.git",                  # Keep tags updated
+    :supertab      => "git://github.com/ervandew/supertab.git",                    # Completion
+
+    :snipmate      => "git://github.com/garbas/vim-snipmate.git",                  # snippets plugin
+    :snipmateadds  => "git://github.com/honza/snipmate-snippets.git",              # snipmate syntax
+    :tlib_vim      => "git://github.com/tomtom/tlib_vim.git",                      # snipmate dependency
+    :mw_adds       => "git://github.com/MarcWeber/vim-addon-mw-utils.git",         # snipmate dependency
 
     # syntax definitions
     :syntax_git       => "git://github.com/tpope/vim-git.git",
