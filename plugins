@@ -25,11 +25,11 @@ map <leader>cu <plug>NERDCommenterUncomment
 " sets ,a, to align on commas (useful for stacked method calls, etc)
 map <leader>a, :Tabularize /=>\?<cr>
 
-""" Fuzzy Finder
-map <leader>p :FuzzyFinderTextMate<CR>
-map <leader>R :FuzzyFinderTextMateRefreshFiles<CR>
-let g:fuzzy_ignore = "*.png"
-let g:fuzzy_matching_limit = 50                            " Search limit
+" For ctrl p remap
+let g:ctrlp_map = "<leader>p"
+
+"For neocomplcache
+let g:neocomplcache_enable_at_startup = 1
 
 """ ack
 map <leader>ack :Ack
@@ -45,6 +45,19 @@ nnoremap <silent> <F11> :BufExplorer<CR>
 nnoremap <silent> <F12> :bn<CR>
 nnoremap <silent> <F11> :bp<CR>
 
-"" supertab
-let g:SuperTabDefaultCompletionType = "context"
+"AutoComplPop like behavior.
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_enable_auto_delimiter = 1
 
+" SuperTab like snippets behavior.
+imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+
+" Plugin key-mappings.
+imap <C-k> <Plug>(neocomplcache_snippets_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_expand)
+inoremap <expr><C-g> neocomplcache#undo_completion()
+inoremap <expr><C-l> neocomplcache#complete_common_string()
