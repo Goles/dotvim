@@ -15,6 +15,7 @@ let mapleader=',' " set leader to ,
 
 " format paragraphs (72 columns)
 "map ^^ {!}par w72qrg<CR>
+inoremap <leader>,l <C-x><C-o>
 
 " one-stroke window maximizing
 map <C-H> <C-W>h<C-W><BAR>

@@ -30,7 +30,7 @@ namespace :update do
     :rails         => "git://github.com/tpope/vim-rails.git",
     :surround      => "git://github.com/tpope/vim-surround.git",
     :autoclose     => "git://github.com/Townk/vim-autoclose.git",
-    :fuzzy_finder_textmate => "git://github.com/sethbc/fuzzyfinder_textmate.git",  # Fuzzy-Finder text-mate like 
+    :fuzzyfinder_textmate => "git://github.com/sethbc/fuzzyfinder_textmate.git",  # Fuzzy-Finder text-mate like 
     :autotag       => "git://github.com/vim-scripts/AutoTag.git",                  # Keep tags updated
     :supertab      => "git://github.com/ervandew/supertab.git",                    # Completion
 

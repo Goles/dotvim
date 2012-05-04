@@ -27,3 +27,8 @@ set hlsearch     " enable search highlight
 "   Z: don't reset 'readonly' when using :w!
 set cpoptions=aABceFsWZ
 set clipboard=unnamed
+
+"" Enable syntax
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS 
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags 
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
