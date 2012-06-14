@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: omni_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 22 Apr 2012.
+" Last Modified: 31 May 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -30,6 +30,7 @@ set cpo&vim
 let s:source = {
       \ 'name' : 'omni_complete',
       \ 'kind' : 'complfunc',
+      \ 'compare_func' : 'neocomplcache#compare_nothing',
       \}
 
 function! s:source.initialize()"{{{
@@ -42,7 +43,7 @@ function! s:source.initialize()"{{{
         \'<[^>]*')
   call neocomplcache#set_dictionary_helper(g:neocomplcache_omni_patterns,
         \'css',
-        \'^\s\+\w\+\|\w\+[):;]\?\s\+\|[@!]')
+        \'^\s\+\w\+\|\w\+[):;]\?\s\+\w*\|[@!]')
   call neocomplcache#set_dictionary_helper(g:neocomplcache_omni_patterns,
         \'javascript',
         \'[^. \t]\.\%(\h\w*\)\?')
@@ -160,15 +161,15 @@ function! s:source.get_keyword_pos(cur_text)"{{{
     call neocomplcache#print_error(v:throwpoint)
     call neocomplcache#print_error(v:exception)
     let cur_keyword_pos = -1
-  endtry
+  finally
+    if is_wildcard && &l:modifiable
+      call setline('.', line)
+    endif
 
-  " Restore pos.
-  if is_wildcard && &l:modifiable
-    call setline('.', line)
-  endif
-  if getpos('.') != pos
-    call setpos('.', pos)
-  endif
+    if getpos('.') != pos
+      call setpos('.', pos)
+    endif
+  endtry
 
   return cur_keyword_pos
 endfunction"}}}
@@ -206,36 +207,19 @@ function! s:source.get_complete_words(cur_keyword_pos, cur_keyword_str)"{{{
     let cur_keyword_str = a:cur_keyword_str
   endif
 
-  if omnifunc ==# 'rubycomplete#Complete'
-        \ && is_wildcard && &l:modifiable
-    let line = getline('.')
-
-    let cur_text =
-          \ cur_text[: match(neocomplcache#get_cur_text(),
-          \   '\%(\*\w\+\)\+$') - 1]
-
-    call setline('.', cur_text)
-  endif
-
   try
-    let list = call(omnifunc,
-          \ [0, omnifunc ==# 'rubycomplete#Complete' ?
-          \ '' : cur_keyword_str])
+    let list = call(omnifunc, [0, cur_keyword_str])
   catch
     call neocomplcache#print_error(
           \ 'Error occured calling omnifunction: ' . omnifunc)
     call neocomplcache#print_error(v:throwpoint)
     call neocomplcache#print_error(v:exception)
     let list = []
+  finally
+    if getpos('.') != pos
+      call setpos('.', pos)
+    endif
   endtry
-
-  if omnifunc ==# 'rubycomplete#Complete'
-        \ && is_wildcard && &l:modifiable
-    call setline('.', line)
-  endif
-  if getpos('.') != pos
-    call setpos('.', pos)
-  endif
 
   if empty(list)
     return []

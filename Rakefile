@@ -24,7 +24,6 @@ namespace :update do
   BUNDLES = {
     # plugins
     :ack           => "http://www.vim.org/scripts/download_script.php?src_id=10433",
-    :bufexplorer   => "http://www.vim.org/scripts/download_script.php?src_id=12904",
     :css_color     => "git://github.com/ap/vim-css-color.git",
     :nerdcommenter => "git://github.com/scrooloose/nerdcommenter.git",
     :rails         => "git://github.com/tpope/vim-rails.git",
@@ -41,6 +40,7 @@ namespace :update do
     :syntax_slidedown => "git://github.com/bleything/vim-slidedown.git",
     :syntax_textile   => "git://github.com/timcharper/textile.vim.git",
     :syntax_vcl       => "git://github.com/smerrill/vcl-vim-plugin.git",
+    :vim_coffee_script => "git://github.com/kchmck/vim-coffee-script.git",
 
     # color schemes
     :colors_solarized => "git://github.com/altercation/vim-colors-solarized.git"

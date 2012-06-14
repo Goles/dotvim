@@ -1,6 +1,6 @@
 *neocomplcache.txt*	Ultimate auto completion system for Vim
 
-Version: 7.0
+Version: 7.1
 Author : Shougo <Shougo.Matsu@gmail.com>
 License: MIT license  {{{
     Permission is hereby granted, free of charge, to any person obtaining
@@ -131,9 +131,8 @@ COMMANDS 					*neocomplcache-commands*
 		Caching [filetype] dictionary file.
 		Select current buffer filetype when [filetype] omitted.
 
-:NeoComplCacheCachingTags [bufname]		*:NeoComplCacheCachingTags*
-		Caching [bufname] tags file.
-		Select current buffer filetype when [bufname] omitted.
+:NeoComplCacheCachingTags		*:NeoComplCacheCachingTags*
+		Caching tags file in current buffer.
 
 :NeoComplCacheCachingInclude [bufname]		*:NeoComplCacheCachingInclude*
 		Caching [bufname] include file.
@@ -366,7 +365,7 @@ g:neocomplcache_enable_prefetch			*g:neocomplcache_enable_prefetch*
 		Partial function (ex: |complete_check()|) is disabled in
 		completefunc.
 		
-		Default value is 0.
+		Default value is 0(less than 7.3.519).
 
 g:neocomplcache_lock_iminsert			*g:neocomplcache_lock_iminsert*
 		This variable is non 0, neocomplcache lock when 'iminsert' is
@@ -662,8 +661,29 @@ g:neocomplcache_source_completion_length	*g:neocomplcache_source_completion_leng
 g:neocomplcache_source_rank			*g:neocomplcache_source_rank*
 		It is a dictionary to control each source's completion
 		priority.
+		The key is source name and the value is source priority number.
 		Note: g:neocomplcache_plugin_rank is deprecated name.
 		
+		The default rank of each sources:
+		filename_complete : 3
+		dictionary_complete : 4
+		buffer_complete : 5
+		syntax_complete : 7
+		include_complete : 8
+		snippets_complete : 8
+		vim_complete : 300
+		omni_complete : 300
+		other plugin sources : 5
+		other completefunc sources : 10
+		other ftplugin sources : 100
+		
+		Ex:
+>
+		let g:neocomplcache_source_rank = {
+			\ 'snippets_complete' : 100,
+			\ 'abbrev_complete' : 50,
+			\ }
+<
 		Default value is set by each sources.
 
 g:neocomplcache_force_overwrite_completefunc	*g:neocomplcache_force_overwrite_completefunc*
@@ -678,6 +698,13 @@ g:neocomplcache_release_cache_time		*g:neocomplcache_release_cache_time*
 		This variable defines time of automatic released cache by a second unit.
 		
 		Default value is 900.
+
+g:neocomplcache_use_vimproc			*g:neocomplcache_use_vimproc*
+		This variable is non 0, neocomplcache use |vimproc|.
+		Note: If this variable is non 0, neocomplcache will make cache
+		asynchronously.
+		
+		Default value is vimproc auto detection result.
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS 					*neocomplcache-key-mappings*
@@ -856,13 +883,11 @@ member_complete.vim				*member_complete*
 		This source collects use of member variables from buffer.
 
 tags_complete.vim				*tags_complete*
-		This source analyzes a tag file defined in 'tags' for
-		completion.  When a huge tag file is set, neocomplcache
-		don't make cache if you don't execute
-		|:NeoComplCacheCachingTags|command.  Because
-		tags_complete is too slow if tags_complete read a big
-		tags file.  You should use more convenient include
-		completion now.
+		This source analyzes a tag file from tagfiles() for completion.
+		When a huge tag file is set, neocomplcache don't make cache if
+		you don't execute |:NeoComplCacheCachingTags|command.  Because
+		tags_complete is too slow if tags_complete read a big tags
+		file.  You should use more convenient include completion now.
 
 syntax_complete.vim				*syntax_complete*
 		This source analyzes a syntax file like
@@ -957,11 +982,93 @@ Todo
 ==============================================================================
 CHANGELOG					*neocomplcache-changelog*
 
+2012-06-10
+- Improved same filetype for plaintex.
+
+2012-06-07
+- Fixed for tags_complete.
+
+2012-06-06
+- Fixed for fuzzyfinder.
+
+2012-06-05
+- Added g:neocomplcache_use_vimproc option.
+
+2012-06-01
+- Improved asynchronous cache behavior.
+
+2012-05-31
+- Improved MacOS check.
+- Fixed for css omni_complete.
+
+2012-05-30
+- Fixed for MacVim check.
+
+2012-05-28
+- Fixed for MacVim.
+
+2012-05-26
+- Fixed omni_complete for rubycomplete.
+- Fixed for eskk convertion check.
+- Improved check lock.
+- Improved for omni_complete.
+
+2012-05-24
+- Changed filename_complete default rank.
+- Improved auto complete behavior.
+
+2012-05-23
+- Improved sort behavior.
+- Fixed omni_complete sort.
+
+2012-05-22
+- Added word order function.
+
+2012-05-21
+- Fixed warning mappings.
+- Silent mapping.
+- Improved g:neocomplcache_source_rank documentaion.
+
+2012-05-20
+- Fixed g:neocomplcache_enable_prefetch initialization.
+- Added neocomplcache#complete_check().
+- Improved complete_check timing.
+
+2012-05-19
+- Fixed for eskk error.
+- Supported Vim 7.3.519 feature.
+- Improved error catch behavior.
+- Deleted fileencoding.
+- Supported wildcard import in include_complete.
+- Fixed filename_complete.
+
+2012-05-18
+- Fixed filename completion.
+
+2012-05-14
+- Deleted debug message.
+- Fixed error in Vim 7.2.
+
+2012-05-11
+- Improved buffer cache behavior.
+- Fixed include filename completion.
+
+2012-05-09
+- Refactored cache.vim.
+- Fixed tags_complete problem.
+- Improved asynchronous cache.
+- Improved cache timing.
+
+2012-05-08
+- Fixed cd problem.
+- Ver.7.1 development is started.
+
 ------------------------------------------------------------------------------
 ChangeLog neocomplcache 7.0:
 
 2012-05-04
 - Fixed command definition.
+- Ver.7.0.
 
 2012-05-03
 - Improved make cache behavior.

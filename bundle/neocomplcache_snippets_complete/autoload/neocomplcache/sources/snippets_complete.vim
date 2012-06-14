@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: snippets_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Apr 2012.
+" Last Modified: 06 Jun 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -76,8 +76,6 @@ function! s:source.initialize()"{{{
     autocmd FileType * call s:caching()
     " Recaching events
     autocmd BufWritePost *.snip,*.snippets call s:caching_snippets(expand('<afile>:t:r'))
-    " Detect syntax file.
-    autocmd BufNewFile,BufRead *.snip,*.snippets set filetype=snippet
   augroup END"}}}
 
   if has('conceal')
@@ -437,12 +435,12 @@ function! s:load_snippets(snippet, snippets_file)"{{{
         let snippet_pattern.prev_word = matchstr(line,
               \ '^prev_word\s\+[''"]\zs.*\ze[''"]$')
       elseif line =~ '^\s'
-        if snippet_pattern.word == ''
-          let snippet_pattern.word = matchstr(line, '^\s\+\zs.*$')
-        else
+        if snippet_pattern.word != ''
           let snippet_pattern.word .= "\n"
-                \ . matchstr(line, '^\%(\t\| *\)\zs.*$')
         endif
+
+        let snippet_pattern.word .=
+                \ matchstr(line, '^\%(\t\| *\)\zs.*$')
       elseif line =~ '^$'
         " Blank line.
         let snippet_pattern.word .= "\n"
@@ -565,9 +563,9 @@ function! neocomplcache#sources#snippets_complete#expand(cur_text, col, trigger_
   let next_col = len(snippet_lines[-1]) + 1
   let snippet_lines[-1] = snippet_lines[-1] . next_line
 
-  call setline(line('.'), snippet_lines[0])
+  call setline('.', snippet_lines[0])
   if len(snippet_lines) > 1
-    call append(line('.'), snippet_lines[1:])
+    call append('.', snippet_lines[1:])
   endif
 
   call s:indent_snippet(begin_line, end_line)
@@ -608,7 +606,7 @@ function! s:indent_snippet(begin, end)"{{{
   let pos = getpos('.')
 
   let base_indent = matchstr(getline(a:begin), '^\s\+')
-  for line_nr in range(a:begin, a:end)
+  for line_nr in range(a:begin+1, a:end)
     call cursor(line_nr, 0)
 
     if getline('.') =~ '^\t\+'
@@ -882,6 +880,9 @@ function! neocomplcache#sources#snippets_complete#get_snippets()"{{{
   call extend(snippets, copy(s:snippets['_']), 'keep')
 
   return snippets
+endfunction"}}}
+function! neocomplcache#sources#snippets_complete#get_snippets_dir()"{{{
+  return s:snippets_dir
 endfunction"}}}
 
 function! s:get_placeholder_marker_pattern()"{{{
