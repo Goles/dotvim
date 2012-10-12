@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: snippets_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 06 Jun 2012.
+" Last Modified: 03 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -111,6 +111,9 @@ function! s:source.initialize()"{{{
   command! -nargs=? -complete=customlist,neocomplcache#filetype_complete
         \ NeoComplCacheCachingSnippets
         \ call s:caching_snippets(<q-args>)
+
+  inoremap <expr><silent> <Plug>(neocomplcache_start_unite_snippet)
+        \ unite#sources#snippet#start_complete()
 
   " Select mode mappings.
   if !exists('g:neocomplcache_disable_select_mode_mappings')
@@ -230,6 +233,8 @@ function! s:keyword_filter(list, cur_keyword_str)"{{{
       endif
       let snippet.menu = '`Snip` ' . snippet.menu
     endif
+
+    let snippet.neocomplcache__convertable = 0
   endfor
 
   return list
@@ -254,6 +259,7 @@ function! neocomplcache#sources#snippets_complete#force_expandable()"{{{
 
   " Found snippet trigger.
   return s:get_cursor_keyword_snippet(snippets, cur_text) != ''
+        \ || s:get_cursor_snippet(snippets, cur_text) != ''
 endfunction"}}}
 function! neocomplcache#sources#snippets_complete#jumpable()"{{{
   " Found snippet placeholder.
@@ -306,8 +312,8 @@ function! s:set_snippet_pattern(dict)"{{{
         \ g:neocomplcache_max_keyword_width-10)
 
   let a:dict.word = substitute(a:dict.word, '\n$', '', '')
-  let menu_pattern =
-        \ (a:dict.word =~ '\${\d\+\%(:.\{-}\)\?\\\@<!}') ?
+  let menu_pattern = (a:dict.word =~
+        \ s:get_placeholder_marker_substitute_pattern()) ?
         \ '<Snip> ' : '[Snip] '
 
   let abbr = get(a:dict, 'abbr', substitute(a:dict.word,
@@ -366,10 +372,13 @@ function! s:caching_snippets(filetype)"{{{
         \ &filetype : a:filetype
 
   let snippet = {}
-  let snippets_files = split(globpath(join(s:snippets_dir, ','),
-        \ filetype .  '.snip*'), '\n')
+  let snippets_files =
+        \   split(globpath(join(s:snippets_dir, ','),
+        \   filetype .  '.snip*'), '\n')
         \ + split(globpath(join(s:snippets_dir, ','),
-        \ filetype .  '_*.snip*'), '\n')
+        \   filetype .  '_*.snip*'), '\n')
+        \ + split(globpath(join(s:snippets_dir, ','),
+        \   filetype .  '/*.snip*'), '\n')
   for snippets_file in snippets_files
     call s:load_snippets(snippet, snippets_file)
   endfor
@@ -437,10 +446,13 @@ function! s:load_snippets(snippet, snippets_file)"{{{
       elseif line =~ '^\s'
         if snippet_pattern.word != ''
           let snippet_pattern.word .= "\n"
+        else
+          " Substitute Tab character.
+          let line = substitute(line, '^\t', '', '')
         endif
 
         let snippet_pattern.word .=
-                \ matchstr(line, '^\%(\t\| *\)\zs.*$')
+                \ matchstr(line, '^ *\zs.*$')
       elseif line =~ '^$'
         " Blank line.
         let snippet_pattern.word .= "\n"
@@ -449,6 +461,12 @@ function! s:load_snippets(snippet, snippets_file)"{{{
 
     let linenr += 1
   endfor
+
+  if snippet_pattern.word !~
+        \ s:get_placeholder_marker_substitute_pattern()
+    " Add placeholder.
+    let snippet_pattern.word .= '${0}'
+  endif
 
   " Set previous snippet.
   call s:set_snippet_dict(snippet_pattern,
@@ -493,6 +511,13 @@ function! s:snippets_expand_or_jump(cur_text, col)"{{{
   let cur_word = s:get_cursor_keyword_snippet(
         \ neocomplcache#sources#snippets_complete#get_snippets(),
         \ a:cur_text)
+  if cur_word == ''
+    " Check by force_expand.
+    let cur_word = s:get_cursor_snippet(
+          \ neocomplcache#sources#snippets_complete#get_snippets(),
+          \ a:cur_text)
+  endif
+
   if cur_word != ''
     " Found snippet trigger.
     call neocomplcache#sources#snippets_complete#expand(
@@ -610,13 +635,16 @@ function! s:indent_snippet(begin, end)"{{{
     call cursor(line_nr, 0)
 
     if getline('.') =~ '^\t\+'
-      if &l:expandtab
+      " Delete head tab character.
+      let current_line = substitute(getline('.'), '^\t', '', '')
+
+      if &l:expandtab && current_line =~ '^\t\+'
         " Expand tab.
-        cal setline('.', substitute(getline('.'),
+        cal setline('.', substitute(current_line,
               \ '^\t\+', base_indent . repeat(' ', &shiftwidth *
-              \    len(matchstr(getline('.'), '^\t\+'))), ''))
+              \    len(matchstr(current_line, '^\t\+'))), ''))
       elseif line_nr != a:begin
-        call setline('.', base_indent . getline('.'))
+        call setline('.', base_indent . current_line)
       endif
     else
       silent normal! ==
@@ -845,8 +873,15 @@ function! s:substitute_placeholder_marker(start, end, snippet_holder_cnt)"{{{
 endfunction"}}}
 function! s:trigger(function)"{{{
   let cur_text = neocomplcache#get_cur_text(1)
+
+  let col = col('.')
+  if mode() !=# 'i'
+    " Fix column.
+    let col += 2
+  endif
+
   return printf("\<ESC>:call %s(%s,%d)\<CR>",
-        \ a:function, string(cur_text), col('.'))
+        \ a:function, string(cur_text), col)
 endfunction"}}}
 function! s:eval_snippet(snippet_text)"{{{
   let snip_word = ''

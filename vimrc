@@ -27,3 +27,4 @@ source $HOME/.vim/filetypes
 syntax enable
 set background=light
 colorscheme solarized
+set clipboard=unnamed

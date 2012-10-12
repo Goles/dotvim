@@ -53,8 +53,33 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_enable_auto_delimiter = 1
 
-" SuperTab like snippets behavior.
-imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+" If you prefer the Omni-Completion tip window to close when a selection is
+" made, these lines close it on movement in insert mode or when leaving
+" insert mode
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" My tab mappings
+function! TabMappings()
+
+  if pumvisible()
+    return "\<C-n>"
+  elseif &ft == 'c'
+    return "\<C-X>\<C-U>"
+  elseif &ft == 'c++'
+    return "\<C-X>\<C-U>"
+  elseif &ft == 'objc'
+    return "\<C-X>\<C-U>"
+  elseif &ft == 'objcpp'
+    return "\<C-X>\<C-U>"
+  elseif neocomplcache#sources#snippets_complete#expandable()
+    return "\<Plug>(neocomplcache_snippets_expand)"
+  else
+    return "\<TAB>"
+  endif
+endfunction
+
+imap <expr><TAB> TabMappings()
 
 " Plugin key-mappings.
 imap <C-k> <Plug>(neocomplcache_snippets_expand)
