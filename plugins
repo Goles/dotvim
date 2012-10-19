@@ -28,9 +28,6 @@ map <leader>a, :Tabularize /=>\?<cr>
 " For ctrl p remap
 let g:ctrlp_map = "<leader>p"
 
-"For neocomplcache
-let g:neocomplcache_enable_at_startup = 1
-
 """ ack
 map <leader>ack :Ack
 map <leader>an :cn<cr>
@@ -45,6 +42,7 @@ nnoremap <silent> <F11> :BufExplorer<CR>
 nnoremap <silent> <F12> :bn<CR>
 nnoremap <silent> <F11> :bp<CR>
 
+""" neocomplcache
 "AutoComplPop like behavior.
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_camel_case_completion = 1
@@ -59,30 +57,25 @@ let g:neocomplcache_enable_auto_delimiter = 1
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
-" My tab mappings
-function! TabMappings()
-
-  if pumvisible()
-    return "\<C-n>"
-  elseif &ft == 'c'
-    return "\<C-X>\<C-U>"
-  elseif &ft == 'c++'
-    return "\<C-X>\<C-U>"
-  elseif &ft == 'objc'
-    return "\<C-X>\<C-U>"
-  elseif &ft == 'objcpp'
-    return "\<C-X>\<C-U>"
-  elseif neocomplcache#sources#snippets_complete#expandable()
-    return "\<Plug>(neocomplcache_snippets_expand)"
-  else
-    return "\<TAB>"
-  endif
-endfunction
-
-imap <expr><TAB> TabMappings()
-
 " Plugin key-mappings.
 imap <C-k> <Plug>(neocomplcache_snippets_expand)
 smap <C-k> <Plug>(neocomplcache_snippets_expand)
 inoremap <expr><C-g> neocomplcache#undo_completion()
 inoremap <expr><C-l> neocomplcache#complete_common_string()
+
+if !exists('g:neocomplcache_force_omni_patterns')
+    let g:neocomplcache_force_omni_patterns = {}
+endif
+let g:neocomplcache_force_overwrite_completefunc = 1
+let g:neocomplcache_force_omni_patterns.c =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_force_omni_patterns.cpp =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.objc =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.objcpp =
+            \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:clang_complete_auto = 0
+let g:clang_auto_select = 0
+let g:clang_use_library = 1
+

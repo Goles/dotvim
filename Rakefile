@@ -41,10 +41,7 @@ namespace :update do
     :syntax_textile   => "git://github.com/timcharper/textile.vim.git",
     :syntax_vcl       => "git://github.com/smerrill/vcl-vim-plugin.git",
     :vim_coffee_script => "git://github.com/kchmck/vim-coffee-script.git",
-
-
-    # For iOS development
-    :vim_ios => "git://github.com/eraserhd/vim-ios.git",
+    :clang_complete => "git://github.com/Goles/Clang_Complete-Pathogen.git",
 
     # color schemes
     :colors_solarized => "git://github.com/altercation/vim-colors-solarized.git"

@@ -27,9 +27,6 @@ map <C-K> <C-W>k<C-W>_
 map <leader>[ :bprevious<CR>
 map <leader>] :bnext<CR>
 
-" shortcut to compile/run the current file
-map <leader>r :w<CR>:make %<CR>
-
 " shortcut to strip trailing whitespace
 map <leader>s :s/\s\+$//g<CR>
 
@@ -55,4 +52,63 @@ nnoremap <silent> <C-t> :tabnew<CR>
 nnoremap <silent> <C-h> :tabprevious<CR>
 nnoremap <silent> <C-l> :tabnext<CR>
 inoremap <C-t> <esc>:tabnew<CR>
+
+"" To execute shell commands taken from :Shell 
+"" http://vim.wikia.com/wiki/Display_output_of_shell_commands_in_new_window
+let s:_ = ''
+function! s:ExecuteInShell(command, bang)
+    let _ = a:bang != '' ? s:_ : a:command == '' ? '' : join(map(split(a:command), 'expand(v:val)'))
+
+    if (_ != '')
+        let s:_ = _
+        let bufnr = bufnr('%')
+        let winnr = bufwinnr('^' . _ . '$')
+        silent! execute  winnr < 0 ? 'belowright new ' . fnameescape(_) : winnr . 'wincmd w'
+        setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile wrap number
+        silent! :%d
+        let message = 'Execute ' . _ . '...'
+        call append(0, message)
+        echo message
+        silent! 2d | resize 1 | redraw
+        silent! execute 'silent! %!'. _
+        silent! execute 'resize ' . line('$')
+        silent! execute 'syntax on'
+        silent! execute 'autocmd BufUnload <buffer> execute bufwinnr(' . bufnr . ') . ''wincmd w'''
+        silent! execute 'autocmd BufEnter <buffer> execute ''resize '' .  line(''$'')'
+        silent! execute 'nnoremap <silent> <buffer> <CR> :call <SID>ExecuteInShell(''' . _ . ''', '''')<CR>'
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . _ . ''', '''')<CR>'
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>g :execute bufwinnr(' . bufnr . ') . ''wincmd w''<CR>'
+        nnoremap <silent> <buffer> <C-W>_ :execute 'resize ' . line('$')<CR>
+        silent! syntax on
+    endif
+endfunction
+
+command! -complete=shellcmd -nargs=* -bang Shell call s:ExecuteInShell(<q-args>, '<bang>')
+command! -complete=shellcmd -nargs=* -bang BuildDevice call s:ExecuteInShell('xcodebuild -sdk iphoneos build', '<bang>')
+command! -complete=shellcmd -nargs=* -bang BuildSimulator call s:ExecuteInShell('xcodebuild -sdk iphonesimulator6.0 build', '<bang>')
+command! -complete=shellcmd -nargs=* -bang RunDevice call s:ExecuteInShell("fruitstrap -d -b build/Release-iphoneos/*.app", '<bang>')
+command! -complete=shellcmd -nargs=* -bang RunSimulator call s:ExecuteInShell("ios-sim launch build/Release-iphonesimulator/*.app", '<bang>')
+cabbrev shell Shell
+
+" My tab mappings
+function! TabMappings()
+
+  if pumvisible()
+    return "\<C-n>"
+  elseif &ft == 'c'
+    return "\<C-X>\<C-U>"
+  elseif &ft == 'c++'
+    return "\<C-X>\<C-U>"
+  elseif &ft == 'objc'
+    return "\<C-X>\<C-U>"
+  elseif &ft == 'objcpp'
+    return "\<C-X>\<C-U>"
+  elseif neocomplcache#sources#snippets_complete#expandable()
+    return "\<Plug>(neocomplcache_snippets_expand)"
+  else
+    return "\<TAB>"
+  endif
+endfunction
+
+imap <expr><TAB> TabMappings()
 
