@@ -10,7 +10,7 @@ Pretty straightforward.  Clone and symlink:
   $ git clone git://github.com/bleything/dotvim.git ~/.vim
   $ ln -s ~/.vim/vimrc ~/.vimrc
 
-Optionally, you may want to update the bundles:
+** You must perform a Rake update to download the bundles **
 
   $ cd ~/.vim && rake update
 
