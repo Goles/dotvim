@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neocomplcache.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Oct 2012.
+" Last Modified: 19 Oct 2012.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,6 +24,10 @@
 " }}}
 "=============================================================================
 
+if !exists('g:loaded_neocomplcache')
+  runtime! plugin/neocomplcache.vim
+endif
+
 let s:save_cpo = &cpo
 set cpo&vim
 
@@ -35,7 +39,6 @@ function! s:initialize_variables()"{{{
   let s:plugin_sources = {}
   let s:ftplugin_sources = {}
   let s:loaded_ftplugin_sources = {}
-  let s:sources_lock = {}
   let s:cur_keyword_str = ''
   let s:complete_words = []
   let s:complete_results = {}
@@ -52,6 +55,10 @@ function! s:initialize_variables()"{{{
   let s:filetype_frequencies = {}
   let s:cur_keyword_pos = -1
   let s:loaded_all_sources = 0
+
+  if has('reltime')
+    let s:start_time = reltime()
+  endif
 endfunction"}}}
 
 if !exists('s:is_enabled')
@@ -59,10 +66,20 @@ if !exists('s:is_enabled')
   let s:is_enabled = 0
 endif
 
+function! neocomplcache#initialize() "{{{
+  call neocomplcache#enable()
+  call s:initialize_sources([''])
+endfunction"}}}
+
 function! neocomplcache#enable() "{{{
+  if neocomplcache#is_enabled()
+    return
+  endif
+
   " Auto commands."{{{
   augroup neocomplcache
     autocmd!
+    autocmd InsertEnter * call s:on_insert_enter()
     autocmd InsertLeave * call s:on_insert_leave()
     autocmd CursorMovedI * call s:on_moved_i()
   augroup END
@@ -654,7 +671,8 @@ endfunction"}}}
 
 function! neocomplcache#disable()"{{{
   if !neocomplcache#is_enabled()
-    call neocomplcache#print_warning('neocomplcache is disabled! This command is ignored.')
+    call neocomplcache#print_warning(
+          \ 'neocomplcache is disabled! This command is ignored.')
     return
   endif
 
@@ -847,10 +865,16 @@ function! s:do_auto_complete(event)"{{{
     let cur_text .= v:char
   endif
 
+  if g:neocomplcache_enable_debug
+    echomsg 'cur_text = ' . cur_text
+  endif
+
   " Prevent infinity loop.
-  if cur_text == ''
-        \ || cur_text == s:old_cur_text
-        \ || (g:neocomplcache_lock_iminsert && &l:iminsert)
+  if s:is_skip_auto_complete(cur_text)
+    if g:neocomplcache_enable_debug
+      echomsg 'Skipped.'
+    endif
+
     let s:cur_keyword_str = ''
     let s:complete_words = []
     return
@@ -873,6 +897,10 @@ function! s:do_auto_complete(event)"{{{
     endfor
 
     if !is_delimiter
+      if g:neocomplcache_enable_debug
+        echomsg 'Skipped.'
+      endif
+
       return
     endif
   endif
@@ -885,12 +913,20 @@ function! s:do_auto_complete(event)"{{{
   " Check multibyte input or eskk.
   if neocomplcache#is_eskk_enabled()
         \ || neocomplcache#is_multibyte_input(cur_text)
+    if g:neocomplcache_enable_debug
+      echomsg 'Skipped.'
+    endif
+
     return
   endif
 
   " Check complete position.
   let complete_results = s:set_complete_results_pos(cur_text)
   if empty(complete_results)
+    if g:neocomplcache_enable_debug
+      echomsg 'Skipped.'
+    endif
+
     return
   endif
 
@@ -902,6 +938,10 @@ function! s:do_auto_complete(event)"{{{
           \ neocomplcache#get_complete_results(cur_text)
 
     if empty(s:complete_results)
+      if g:neocomplcache_enable_debug
+        echomsg 'Skipped.'
+      endif
+
       " Skip completion.
       let &l:completefunc = 'neocomplcache#manual_complete'
       let s:complete_words = []
@@ -967,20 +1007,21 @@ function! neocomplcache#keyword_escape(cur_keyword_str)"{{{
         \ && (g:neocomplcache_fuzzy_completion_start_length
         \          <= keyword_len && keyword_len < 20)
     let keyword_escape = s:keyword_escape(a:cur_keyword_str)
+    let pattern = keyword_len >= 8 ?
+          \ '\0\\w*\\W\\?' :
+          \ '\\%(\0\\|\U\0\E\\l*\\|\0\\w*\\W\\)'
 
     let start = g:neocomplcache_fuzzy_completion_start_length
     if start <= 1
       let keyword_escape =
-            \ substitute(keyword_escape, '\w',
-            \   '\\%(\0\\|\U\0\E\\l*\\|\0\\w*\\W\\)', 'g')
+            \ substitute(keyword_escape, '\w', pattern, 'g')
     elseif keyword_len < 8
       let keyword_escape = keyword_escape[: start - 2]
-            \ . substitute(keyword_escape[start-1 :], '\w',
-            \     '\\%(\0\\|\U\0\E\\l*\\|\0\\w*\\W\\)', 'g')
+            \ . substitute(keyword_escape[start-1 :], '\w', pattern, 'g')
     else
       let keyword_escape = keyword_escape[: 3] .
             \ substitute(keyword_escape[4:12], '\w',
-            \     '\\%(\0\\|\U\0\E\\l*\\|\0\\w*\\W\\)', 'g') . keyword_escape[13:]
+            \   pattern, 'g') . keyword_escape[13:]
     endif
   else
     let head = neocomplcache#is_auto_complete() ?
@@ -1020,8 +1061,8 @@ endfunction"}}}
 function! neocomplcache#keyword_filter(list, cur_keyword_str)"{{{
   let cur_keyword_str = a:cur_keyword_str
 
-  if neocomplcache#complete_check()
-    return []
+  if g:neocomplcache_enable_debug
+    echomsg len(a:list)
   endif
 
   " Delimiter check.
@@ -1132,9 +1173,7 @@ function! neocomplcache#dictionary_filter(dictionary, cur_keyword_str)"{{{
   endif
 
   let completion_length = 2
-  if len(a:cur_keyword_str) < completion_length ||
-        \ neocomplcache#check_completion_length_match(
-        \   a:cur_keyword_str, completion_length)
+  if len(a:cur_keyword_str) < completion_length
     return neocomplcache#keyword_filter(
           \ neocomplcache#unpack_dictionary(a:dictionary), a:cur_keyword_str)
   endif
@@ -1150,15 +1189,35 @@ function! neocomplcache#dictionary_filter(dictionary, cur_keyword_str)"{{{
     " Convert dictionary dictionary.
     unlet list
     let list = values(a:dictionary[key])
+  else
+    let list = copy(list)
   endif
 
-  return (len(a:cur_keyword_str) == completion_length && &ignorecase)?
-        \ list : neocomplcache#keyword_filter(copy(list), a:cur_keyword_str)
+  return (len(a:cur_keyword_str) == completion_length && &ignorecase
+        \ && !neocomplcache#check_completion_length_match(
+        \   a:cur_keyword_str, completion_length)) ?
+        \ list : neocomplcache#keyword_filter(list, a:cur_keyword_str)
 endfunction"}}}
 function! neocomplcache#unpack_dictionary(dict)"{{{
   let ret = []
-  for l in values(a:dict)
-    let ret += type(l) == type([]) ? l : values(l)
+  let values = values(a:dict)
+  for l in (type(values) == type([]) ?
+        \ values : values(values))
+    let ret += (type(l) == type([])) ? copy(l) : values(l)
+  endfor
+
+  return ret
+endfunction"}}}
+function! neocomplcache#pack_dictionary(list)"{{{
+  let completion_length = 2
+  let ret = {}
+  for candidate in a:list
+    let key = tolower(candidate.word[: completion_length-1])
+    if !has_key(ret, key)
+      let ret[key] = {}
+    endif
+
+    let ret[key][candidate.word] = candidate
   endfor
 
   return ret
@@ -1250,13 +1309,9 @@ function! neocomplcache#get_next_keyword()"{{{
   return matchstr('a'.getline('.')[len(neocomplcache#get_cur_text()) :], pattern)[1:]
 endfunction"}}}
 function! neocomplcache#get_completion_length(plugin_name)"{{{
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
   if neocomplcache#is_auto_complete()
-        \ && b:neocomplcache.completion_length >= 0
-    return b:neocomplcache.completion_length
+        \ && s:get_current_neocomplcache().completion_length >= 0
+    return s:get_current_neocomplcache().completion_length
   elseif has_key(g:neocomplcache_source_completion_length,
         \ a:plugin_name)
     return g:neocomplcache_source_completion_length[a:plugin_name]
@@ -1340,27 +1395,22 @@ function! neocomplcache#is_enabled()"{{{
   return s:is_enabled
 endfunction"}}}
 function! neocomplcache#is_locked(...)"{{{
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
   let bufnr = a:0 > 0 ? a:1 : bufnr('%')
   return !s:is_enabled
         \ || g:neocomplcache_disable_auto_complete
-        \ || b:neocomplcache.lock
+        \ || s:get_current_neocomplcache().lock
         \ || (g:neocomplcache_lock_buffer_name_pattern != '' &&
         \   bufname(bufnr) =~ g:neocomplcache_lock_buffer_name_pattern)
         \ || &l:omnifunc ==# 'fuf#onComplete'
 endfunction"}}}
 function! neocomplcache#is_plugin_locked(source_name)"{{{
-  if !s:is_enabled
+  if !neocomplcache#is_enabled()
     return 1
   endif
 
-  let bufnr = bufnr('%')
-  return has_key(s:sources_lock, bufnr)
-        \ && has_key(s:sources_lock[bufnr], a:source_name)
-        \ && s:sources_lock[bufnr][a:source_name]
+  let neocomplcache = s:get_current_neocomplcache()
+
+  return get(neocomplcache.lock_sources, a:source_name, 0)
 endfunction"}}}
 function! neocomplcache#is_auto_select()"{{{
   return g:neocomplcache_enable_auto_select && !neocomplcache#is_eskk_enabled()
@@ -1511,15 +1561,12 @@ function! neocomplcache#get_context_filetype(...)"{{{
     return &filetype
   endif
 
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
-  if a:0 != 0 || b:neocomplcache.context_filetype == ''
+  if a:0 != 0 ||
+        \ s:get_current_neocomplcache().context_filetype == ''
     call s:set_context_filetype()
   endif
 
-  return b:neocomplcache.context_filetype
+  return s:get_current_neocomplcache().context_filetype
 endfunction"}}}
 function! neocomplcache#get_source_rank(plugin_name)"{{{
   if has_key(g:neocomplcache_source_rank, a:plugin_name)
@@ -1555,11 +1602,26 @@ function! neocomplcache#get_temporary_directory()"{{{
   return directory
 endfunction"}}}
 function! neocomplcache#complete_check()"{{{
+  if g:neocomplcache_enable_debug
+    echomsg split(reltimestr(reltime(s:start_time)))[0]
+  endif
   return !neocomplcache#is_prefetch() && complete_check()
+        \ || (neocomplcache#is_auto_complete()
+        \     && has('reltime') && g:neocomplcache_skip_auto_completion_time != ''
+        \     && split(reltimestr(reltime(s:start_time)))[0] >
+        \          g:neocomplcache_skip_auto_completion_time)
 endfunction"}}}
 
 " For unite source.
 function! neocomplcache#get_complete_results(cur_text, ...)"{{{
+  if has('reltime')
+    if g:neocomplcache_enable_debug
+      echomsg 'start get_complete_results'
+    endif
+
+    let s:start_time = reltime()
+  endif
+
   let complete_results = call(
         \ 's:set_complete_results_pos', [a:cur_text] + a:000)
   call s:set_complete_results_words(complete_results)
@@ -1620,11 +1682,11 @@ function! neocomplcache#get_complete_words(complete_results, cur_keyword_pos, cu
           \ && len_words > g:neocomplcache_max_list
       break
     endif
-  endfor
 
-  if neocomplcache#complete_check()
-    return []
-  endif
+    if neocomplcache#complete_check()
+      return []
+    endif
+  endfor
 
   if g:neocomplcache_max_list > 0
     let complete_words = complete_words[: g:neocomplcache_max_list]
@@ -1853,6 +1915,10 @@ function! s:set_complete_results_words(complete_results)"{{{
       endif
     endtry
 
+    if g:neocomplcache_enable_debug
+      echomsg source_name
+    endif
+
     let &ignorecase = ignorecase_save
 
     let result.complete_words = words
@@ -1894,11 +1960,7 @@ function! neocomplcache#toggle_lock()"{{{
     return
   endif
 
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
-  if b:neocomplcache.lock
+  if s:get_current_neocomplcache().lock
     echo 'neocomplcache is unlocked!'
     call neocomplcache#unlock()
   else
@@ -1913,11 +1975,8 @@ function! neocomplcache#lock()"{{{
     return
   endif
 
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
-  let b:neocomplcache.lock = 1
+  let neocomplcache = s:get_current_neocomplcache()
+  let neocomplcache.lock = 1
 endfunction"}}}
 function! neocomplcache#unlock()"{{{
   if !neocomplcache#is_enabled()
@@ -1926,35 +1985,30 @@ function! neocomplcache#unlock()"{{{
     return
   endif
 
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
-  let b:neocomplcache.lock = 0
+  let neocomplcache = s:get_current_neocomplcache()
+  let neocomplcache.lock = 0
 endfunction"}}}
 function! neocomplcache#lock_source(source_name)"{{{
   if !neocomplcache#is_enabled()
-    call neocomplcache#print_warning('neocomplcache is disabled! This command is ignored.')
+    call neocomplcache#print_warning(
+          \ 'neocomplcache is disabled! This command is ignored.')
     return
   endif
 
-  if !has_key(s:sources_lock, bufnr('%'))
-    let s:sources_lock[bufnr('%')] = {}
-  endif
+  let neocomplcache = s:get_current_neocomplcache()
 
-  let s:sources_lock[bufnr('%')][a:source_name] = 1
+  let neocomplcache.lock_sources[a:source_name] = 1
 endfunction"}}}
 function! neocomplcache#unlock_source(source_name)"{{{
   if !neocomplcache#is_enabled()
-    call neocomplcache#print_warning('neocomplcache is disabled! This command is ignored.')
+    call neocomplcache#print_warning(
+          \ 'neocomplcache is disabled! This command is ignored.')
     return
   endif
 
-  if !has_key(s:sources_lock, bufnr('%'))
-    let s:sources_lock[bufnr('%')] = {}
-  endif
+  let neocomplcache = s:get_current_neocomplcache()
 
-  let s:sources_lock[bufnr('%')][a:source_name] = 0
+  let neocomplcache.lock_sources[a:source_name] = 1
 endfunction"}}}
 function! s:display_neco(number)"{{{
   let cmdheight_save = &cmdheight
@@ -2117,18 +2171,12 @@ function! s:display_neco(number)"{{{
   let &cmdheight = cmdheight_save
 endfunction"}}}
 function! neocomplcache#set_file_type(filetype)"{{{
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
-  let b:neocomplcache.filetype = a:filetype
+  let neocomplcache = s:get_current_neocomplcache()
+  let neocomplcache.filetype = a:filetype
 endfunction"}}}
 function! s:set_auto_completion_length(len)"{{{
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
-  endif
-
-  let b:neocomplcache.completion_length = a:len
+  let neocomplcache = s:get_current_neocomplcache()
+  let neocomplcache.completion_length = a:len
 endfunction"}}}
 "}}}
 
@@ -2230,6 +2278,10 @@ endfunction"}}}
 
 " Manual complete wrapper.
 function! neocomplcache#start_manual_complete(...)"{{{
+  if !neocomplcache#is_enabled()
+    return ''
+  endif
+
   " Set context filetype.
   call s:set_context_filetype()
 
@@ -2279,12 +2331,28 @@ function! s:on_moved_i()"{{{
 endfunction"}}}
 function! s:on_insert_leave()"{{{
   let s:cur_text = ''
+  let s:old_cur_text = ''
   let s:cur_keyword_str = ''
   let s:complete_words = []
   let s:is_text_mode = 0
   let s:skip_next_complete = 0
   let s:is_prefetch = 0
   let s:cur_keyword_pos = -1
+
+  " Restore foldinfo.
+  let neocomplcache = s:get_current_neocomplcache()
+  if !empty(neocomplcache.foldinfo) &&
+        \ neocomplcache.foldinfo != [&l:foldmethod, &l:foldexpr]
+     let [&l:foldmethod, &l:foldexpr] = neocomplcache.foldinfo
+  endif
+endfunction"}}}
+function! s:on_insert_enter()"{{{
+  " Save foldinfo.
+  if &l:foldmethod ==# 'expr'
+    let neocomplcache = s:get_current_neocomplcache()
+    let neocomplcache.foldinfo = [&l:foldmethod, &l:foldexpr]
+    setlocal foldmethod=manual foldexpr=0
+  endif
 endfunction"}}}
 function! s:on_complete_done()"{{{
   " Get cursor word.
@@ -2304,14 +2372,16 @@ endfunction"}}}
 function! s:change_update_time()"{{{
   if &updatetime > g:neocomplcache_cursor_hold_i_time
     " Change updatetime.
-    let s:update_time_save = &updatetime
+    let neocomplcache = s:get_current_neocomplcache()
+    let neocomplcache.update_time_save = &updatetime
     let &updatetime = g:neocomplcache_cursor_hold_i_time
   endif
 endfunction"}}}
 function! s:restore_update_time()"{{{
-  if &updatetime < s:update_time_save
+  let neocomplcache = s:get_current_neocomplcache()
+  if &updatetime < neocomplcache.update_time_save
     " Restore updatetime.
-    let &updatetime = s:update_time_save
+    let &updatetime = neocomplcache.update_time_save
   endif
 endfunction"}}}
 function! s:remove_next_keyword(source_name, list)"{{{
@@ -2350,7 +2420,6 @@ function! neocomplcache#popup_post()"{{{
         \  || neocomplcache#is_eskk_enabled()) ? "\<C-p>" :
         \ "\<C-p>\<Down>"
 endfunction"}}}
-
 "}}}
 
 " Internal helper functions."{{{
@@ -2391,12 +2460,10 @@ function! s:get_cur_text()"{{{
   return s:cur_text
 endfunction"}}}
 function! s:set_context_filetype()"{{{
-  if !exists('b:neocomplcache')
-    call s:initialize_buffer_variable()
+  let old_filetype = s:get_current_neocomplcache().filetype
+  if old_filetype == ''
+    let old_filetype = &filetype
   endif
-
-  let old_filetype = (b:neocomplcache.filetype == '') ?
-        \ &filetype : b:neocomplcache.filetype
   if old_filetype == ''
     let old_filetype = 'nothing'
   endif
@@ -2544,13 +2611,20 @@ function! s:get_frequencies()"{{{
 
   return s:filetype_frequencies[filetype]
 endfunction"}}}
-function! s:initialize_buffer_variable()"{{{
-  let b:neocomplcache = {
-        \ 'lock' : 0,
-        \ 'filetype' : '',
-        \ 'context_filetype' : '',
-        \ 'completion_length' : -1,
-        \}
+function! s:get_current_neocomplcache()"{{{
+  if !exists('b:neocomplcache')
+    let b:neocomplcache = {
+          \ 'lock' : 0,
+          \ 'filetype' : '',
+          \ 'context_filetype' : '',
+          \ 'completion_length' : -1,
+          \ 'update_time_save' : &updatetime,
+          \ 'foldinfo' : [],
+          \ 'lock_sources' : {},
+          \}
+  endif
+
+  return b:neocomplcache
 endfunction"}}}
 function! s:initialize_sources(source_names)"{{{
   " Initialize sources table.
@@ -2612,18 +2686,19 @@ endfunction"}}}
 function! s:get_sources_list(...)"{{{
   let filetype = neocomplcache#get_context_filetype()
 
-  let source_names = get(a:000, 0,
+  let source_names = exists('b:neocomplcache_sources_list') ?
+        \ b:neocomplcache_sources_list :
+        \ get(a:000, 0,
         \ get(g:neocomplcache_sources_list, filetype,
-        \   get(g:neocomplcache_sources_list, '_', [''])))
+        \   get(g:neocomplcache_sources_list, '_', ['_'])))
   call s:initialize_sources(source_names)
 
   let all_sources = neocomplcache#available_sources()
   let sources = {}
   for source_name in source_names
-    if source_name == ''
+    if source_name ==# '_'
       " All sources.
-      let sources = all_sources
-      break
+      return all_sources
     endif
 
     if !has_key(all_sources, source_name)
@@ -2636,6 +2711,39 @@ function! s:get_sources_list(...)"{{{
   endfor
 
   return sources
+endfunction"}}}
+function! s:is_skip_auto_complete(cur_text)"{{{
+  if a:cur_text == ''
+        \ || a:cur_text == s:old_cur_text
+        \ || (g:neocomplcache_lock_iminsert && &l:iminsert)
+    return 1
+  endif
+
+  let cur_word = matchstr(a:cur_text,
+        \ '\%(\h\w*\|[^[:alnum:][:space:]_]\+\)$')
+  let old_cur_word = matchstr(s:old_cur_text,
+        \ '\%(\h\w*\|[^[:alnum:][:space:]_]\+\)$')
+
+  let completion_length = max(
+        \ values(g:neocomplcache_source_completion_length) +
+        \ [b:neocomplcache.completion_length,
+        \  g:neocomplcache_auto_completion_start_length, 3])
+
+  if g:neocomplcache_enable_debug
+    echomsg '[cur_word, old_cur_word, completion_length] = '
+          \ . string([cur_word, old_cur_word, completion_length])
+  endif
+
+  if !neocomplcache#is_eskk_enabled() && !s:skip_next_complete
+        \ && old_cur_word != ''
+        \ && len(cur_word) > completion_length
+        \ && stridx(cur_word, old_cur_word) == 0
+        \ && stridx(a:cur_text, s:old_cur_text) == 0
+        \ && empty(s:complete_words)
+    return 1
+  endif
+
+  return 0
 endfunction"}}}
 "}}}
 

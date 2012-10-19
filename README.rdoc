@@ -1,8 +1,7 @@
-= Ben Bleything's .vim
+= Nicolas Goles .vim
 
-This repo is my real, daily use .vim. It is based on the work of many others,
-primarily the crew at {Opscode}[http://opscode.com].  See the Credits section
-below for more details.
+This repo contains my 100% real daily use Vim Config.
+It's based on the work of {Ben Bleything}[https://github.com/bleything/dotvim], so cheers to him!
 
 == Installation
 
@@ -17,28 +16,20 @@ Optionally, you may want to update the bundles:
 
 == What's Inside?!
 
-* My own personal settings, tuned to be super rad
-* The {candycode}[http://www.vim.org/scripts/script.php?script_id=1635] color scheme
-* The {deveiate}[http://www.vim.org/scripts/script.php?script_id=2277] color scheme
-* The {ir_black}[http://blog.infinitered.com/entries/show/8] color scheme
-* The {solarized}[http://ethanschoonover.com/solarized] color scheme
-* The {xoria256}[http://www.vim.org/scripts/script.php?script_id=2140] color scheme
-* The {Tomorrow Night}[https://github.com/ChrisKempson/Vim-Tomorrow-Theme] color scheme
+* My own personal settings, mainly to work with Rails and now Objective-C (iOS).
 
 Also, some plugins:
 
-* {ack}[http://www.vim.org/scripts/script.php?script_id=2572]
-* {Buffer Explorer}[http://www.vim.org/scripts/script.php?script_id=42]
-* {CSS Color}[https://github.com/ap/vim-css-color]
-* {Fugitive}[https://github.com/tpope/vim-fugitive]
-* {NERD Commenter}[http://www.vim.org/scripts/script.php?script_id=1218]
-* {NERD Tree}[http://www.vim.org/scripts/script.php?script_id=1658]
 * {Pathogen}[http://www.vim.org/scripts/script.php?script_id=2332]
+* {Ctrl-P}[git://github.com/kien/ctrlp.vim.git]
+* {Neocomplcache}[git://github.com/Shougo/neocomplcache.git]
+* {Vim-Autoclose}[git://github.com/Townk/vim-autoclose.git]
+* {Surround}[git://github.com/tpope/vim-surround.git]
+* {Clang Complete}[git://github.com/Goles/Clang_Complete-Pathogen.git]
+* {ack}[http://www.vim.org/scripts/script.php?script_id=2572]
+* {CSS Color}[https://github.com/ap/vim-css-color]
+* {NERD Commenter}[http://www.vim.org/scripts/script.php?script_id=1218]
 * {Rails}[http://www.vim.org/scripts/script.php?script_id=1567]
-* {Surround}[http://www.vim.org/scripts/script.php?script_id=1697]
-* {Tabular}[http://github.com/godlygeek/tabular]
-* {Taglist}[http://www.vim.org/scripts/script.php?script_id=273]
-* {Taskpaper.vim}[http://www.vim.org/scripts/script.php?script_id=2027]
 
 Aaaaaalso, some syntax definitions:
 
@@ -46,29 +37,17 @@ Aaaaaalso, some syntax definitions:
 * {HAML/SASS}[http://www.vim.org/scripts/script.php?script_id=1433]
 * {JSON}[http://www.vim.org/scripts/script.php?script_id=1945]
 * {Markdown}[http://github.com/ujihisa/vim-markdown]
-* {nginx}[http://www.vim.org/scripts/script.php?script_id=1886]
-* {Processing}[https://github.com/sophacles/vim-processing]
 * {RDoc}[http://www.vim.org/scripts/script.php?script_id=2878]
 * {Scala}[https://github.com/derekwyatt/vim-scala]
 * {Slidedown}[http://www.vim.org/scripts/script.php?script_id=3069]
 * {Textile}[http://www.vim.org/scripts/script.php?script_id=2305]
 * {VCL}[https://github.com/smerrill/vcl-vim-plugin]
+* {Coffee Script}[git://github.com/kchmck/vim-coffee-script.git]
 
 == Credits
 
-[Mahlon Smith]     Responsible for getting me into vi in the first place and
-                   providing a ton of support, tips, and tricks over the years.
-                   You should go read {this blog post he wrote}[http://martini.nu/blog/2008/07/vim.html]
-                   about his vim setup.
-
-[Adam Jacob]       Upon whose config Joshua and AJ based their tweaks.
-                   Available on {the git hubs}[http://github.com/adamhjk/adam-vim].
-
-[Joshua Timberman] Various tweaks to Adam's config, available on {the git
-                   hubs}[http://github.com/jtimberman/dotvim].
-
-[AJ Christensen]   Various tweaks to Adam's config, available on {the git
-                   hubs}[http://github.com/fujin/dotvim].
+[Ben Bleything]    Original author of the Rakefile. I actually deleted several
+                   of his plug-ins and color files.
 
 [Other Folks]      The authors of the plugins and syntax defined above.
 

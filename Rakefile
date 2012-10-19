@@ -29,7 +29,7 @@ namespace :update do
     :rails         => "git://github.com/tpope/vim-rails.git",
     :surround      => "git://github.com/tpope/vim-surround.git",
     :autoclose     => "git://github.com/Townk/vim-autoclose.git",
-    :autotag       => "git://github.com/vim-scripts/AutoTag.git",                  # Keep tags updated
+    # :autotag       => "git://github.com/vim-scripts/AutoTag.git",                  # Keep tags updated
     :neocomplcache => "git://github.com/Shougo/neocomplcache.git",
     :neocomplcache_snippets_complete => "git://github.com/Shougo/neocomplcache-snippets-complete.git",
     :ctrlp        => "git://github.com/kien/ctrlp.vim.git",
