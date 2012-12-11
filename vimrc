@@ -26,5 +26,10 @@ source $HOME/.vim/filetypes
 
 syntax enable
 set background=light
-colorscheme solarized
+colorscheme Tomorrow-Night-Eighties
 set clipboard=unnamed
+
+"" Switch between Dark and bright
+nnoremap <silent> <F5> :colorscheme Tomorrow<CR>
+nnoremap <silent> <F6> :colorscheme Tomorrow-Night-Eighties<CR>
+nnoremap <silent> <F7> :colorscheme Tomorrow-Night<CR>

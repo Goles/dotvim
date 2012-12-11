@@ -24,27 +24,20 @@ namespace :update do
   BUNDLES = {
     # plugins
     :ack           => "http://www.vim.org/scripts/download_script.php?src_id=10433",
-    :css_color     => "git://github.com/ap/vim-css-color.git",
     :nerdcommenter => "git://github.com/scrooloose/nerdcommenter.git",
-    :rails         => "git://github.com/tpope/vim-rails.git",
-    :surround      => "git://github.com/tpope/vim-surround.git",
     :autoclose     => "git://github.com/Townk/vim-autoclose.git",
-    # :autotag       => "git://github.com/vim-scripts/AutoTag.git",                  # Keep tags updated
-    :neocomplcache => "git://github.com/Shougo/neocomplcache.git",
-    :neocomplcache_snippets_complete => "git://github.com/Shougo/neocomplcache-snippets-complete.git",
     :ctrlp        => "git://github.com/kien/ctrlp.vim.git",
     :syntax_git       => "git://github.com/tpope/vim-git.git",
-    :syntax_haml_sass => "git://github.com/tpope/vim-haml.git",
     :syntax_markdown  => "git://github.com/ujihisa/vim-markdown.git",
-    :syntax_rdoc      => "git://github.com/depuracao/vim-rdoc.git",
-    :syntax_slidedown => "git://github.com/bleything/vim-slidedown.git",
-    :syntax_textile   => "git://github.com/timcharper/textile.vim.git",
-    :syntax_vcl       => "git://github.com/smerrill/vcl-vim-plugin.git",
-    :vim_coffee_script => "git://github.com/kchmck/vim-coffee-script.git",
-    :clang_complete => "git://github.com/Goles/Clang_Complete-Pathogen.git",
 
-    # color schemes
-    :colors_solarized => "git://github.com/altercation/vim-colors-solarized.git"
+    # For completion
+    :neocomplcache => "git://github.com/Shougo/neocomplcache.git",
+    :neosnippet => "git://github.com/Shougo/neosnippet.git",
+
+    # This is for Objective-C Coding
+    # :clang_complete => "git://github.com/Goles/Clang_Complete-Pathogen.git", #crazy branch
+    :clang_complete => "git://github.com/Rip-Rip/clang_complete.git", #official branch
+    :vim_ios => "git://github.com/eraserhd/vim-ios.git"
   }
 
   desc "update any bundles defined in the Rakefile"

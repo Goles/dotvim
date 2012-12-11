@@ -31,8 +31,9 @@ map <leader>] :bnext<CR>
 map <leader>s :s/\s\+$//g<CR>
 
 "" Map escape key to kj
-inoremap jk <Esc>
 inoremap kj <Esc>
+inoremap tn <Esc>
+inoremap lh <Esc>
 
 "" Disable the arrow keys! :D
 noremap  <Up> ""
@@ -45,13 +46,12 @@ noremap  <Right> ""
 noremap! <Right> <Esc>
 
 "" Map control+tab to switch buffers in the same window (NG)
-map <C-tab> <C-w><C-w>
+"map <C-tab> <C-w><C-w>
 
 """ Tab mappings
-nnoremap <silent> <C-t> :tabnew<CR>
+nnoremap <silent> <C-g> :tabnew<CR>
 nnoremap <silent> <C-h> :tabprevious<CR>
 nnoremap <silent> <C-l> :tabnext<CR>
-inoremap <C-t> <esc>:tabnew<CR>
 
 "" To execute shell commands taken from :Shell 
 "" http://vim.wikia.com/wiki/Display_output_of_shell_commands_in_new_window
@@ -111,4 +111,5 @@ function! TabMappings()
 endfunction
 
 imap <expr><TAB> TabMappings()
+imap <C-a>     <Plug>(neocomplcache_snippets_expand)
 
