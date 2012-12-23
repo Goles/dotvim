@@ -25,19 +25,22 @@ namespace :update do
     # plugins
     :ack           => "http://www.vim.org/scripts/download_script.php?src_id=10433",
     :nerdcommenter => "git://github.com/scrooloose/nerdcommenter.git",
-    :autoclose     => "git://github.com/Townk/vim-autoclose.git",
+    :autopair => "git://github.com/jiangmiao/auto-pairs.git",
     :ctrlp        => "git://github.com/kien/ctrlp.vim.git",
     :syntax_git       => "git://github.com/tpope/vim-git.git",
     :syntax_markdown  => "git://github.com/ujihisa/vim-markdown.git",
-
-    # For completion
-    :neocomplcache => "git://github.com/Shougo/neocomplcache.git",
-    :neosnippet => "git://github.com/Shougo/neosnippet.git",
+    :minibufexpl => "git://github.com/fholgado/minibufexpl.vim.git",
 
     # This is for Objective-C Coding
     # :clang_complete => "git://github.com/Goles/Clang_Complete-Pathogen.git", #crazy branch
-    :clang_complete => "git://github.com/Rip-Rip/clang_complete.git", #official branch
+    # :clang_complete => "git://github.com/Rip-Rip/clang_complete.git", #official branch
+    :objcbracket => "git://github.com/Goles/objcbracket.vim.git",
+    :cocoa_vim => "git://github.com/markschabacker/cocoa.vim.git",
     :vim_ios => "git://github.com/eraserhd/vim-ios.git"
+
+    # For completion
+    # :neocomplcache => "git://github.com/Shougo/neocomplcache.git",
+    # :neosnippet => "git://github.com/Shougo/neosnippet.git",
   }
 
   desc "update any bundles defined in the Rakefile"

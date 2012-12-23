@@ -294,7 +294,7 @@ class CompleteThread(threading.Thread):
         # This short pause is necessary to allow vim to initialize itself.
         # Otherwise we would get: E293: block was not locked
         # The user does not see any delay, as we just pause a background thread.
-        time.sleep(0.01)
+        time.sleep(0.1)
         getCurrentTranslationUnit(self.args, self.currentFile, self.fileName)
       else:
         self.result = getCurrentCompletionResults(self.line, self.column,

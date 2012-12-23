@@ -34,25 +34,28 @@ map <leader>ack :Ack
 map <leader>an :cn<cr>
 map <leader>ap :cp<cr>
 
-
-""" Bufexplorer
-" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
-nnoremap <silent> <F11> :BufExplorer<CR>
-nnoremap <silent> <F12> :bn<CR>
-nnoremap <silent> <F11> :bp<CR>
-
 " add neocomplcache option
 let g:neocomplcache_force_overwrite_completefunc=1
 
 " add clang_complete option
 let g:clang_complete_auto=0
 let g:clang_complete_copen=0
-let g:clang_snippets = 1
+let g:clang_complete_patterns=0
+let g:clang_snippets=1
+let g:clang_snippets_engine='clang_complete'
+let g:clang_conceal_snippets=1
+set conceallevel=2 concealcursor=inv
 
-""" neocomplcache
-"AutoComplPop like behavior.
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_min_syntax_length = 3
+" Complete options (disable preview scratch window, longest removed to aways
+" show menu)
+set completeopt=menu,menuone
+
+" Limit popup menu height
+set pumheight=20
+"" neocomplcache
+" AutoComplPop like behavior.
+" let g:neocomplcache_enable_at_startup = 1
+" let g:neocomplcache_min_syntax_length = 2
 
 " If you prefer the Omni-Completion tip window to close when a selection is
 " made, these lines close it on movement in insert mode or when leaving
@@ -61,8 +64,10 @@ autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " Plugin key-mappings.
-imap <C-k> <Plug>(neocomplcache_snippets_expand)
-smap <C-k> <Plug>(neocomplcache_snippets_expand)
-inoremap <expr><C-g> neocomplcache#undo_completion()
-inoremap <expr><C-l> neocomplcache#complete_common_string()
+" imap <C-k> <Plug>(neocomplcache_snippets_expand)
+" smap <C-k> <Plug>(neocomplcache_snippets_expand)
+" inoremap <expr><C-g> neocomplcache#undo_completion()
+" inoremap <expr><C-l> neocomplcache#complete_common_string()
 
+"" Auto pairs
+let g:AutoPairs={'(':')','{':'}',"'":"'",'"':'"', '`':'`'}

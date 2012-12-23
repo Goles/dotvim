@@ -1,4 +1,4 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """
 """ Ben Bleything's Vim Setup
 """ Based on the work of many others. See README.rdoc for credits.
@@ -15,6 +15,7 @@ set nocompatible " to hell with vi compatibility!
 set wildmenu     " fancy command completion menu!
 set modelines=1  " enable modelines
 set hlsearch     " enable search highlight
+set hidden       " enable hidden buffers so that vim doesn't prompt for unsaved changes on buffer switch
 " Miscellaneous Options. Values:
 "   a: ":read" sets window filename
 "   A: ":write" sets window filename
@@ -40,4 +41,6 @@ autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
 highlight EOLWS ctermbg=red guibg=red
 
 "" Basic definitions for clang
-let g:clang_library_path ='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib'
+let g:clang_use_library=1
+let g:clang_library_path='/usr/local/Cellar/llvm/HEAD/lib'
+" let g:clang_library_path ='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib'

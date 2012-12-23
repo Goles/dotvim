@@ -24,8 +24,8 @@ map <C-J> <C-W>j<C-W>_
 map <C-K> <C-W>k<C-W>_
 
 " quick buffer switching
-map <leader>[ :bprevious<CR>
-map <leader>] :bnext<CR>
+noremap <c-[> <Esc>:bp<CR>
+noremap <c-]> <Esc>:bn<CR>
 
 " shortcut to strip trailing whitespace
 map <leader>s :s/\s\+$//g<CR>
@@ -44,9 +44,6 @@ noremap  <Left> ""
 noremap! <Left> <Esc>
 noremap  <Right> ""
 noremap! <Right> <Esc>
-
-"" Map control+tab to switch buffers in the same window (NG)
-"map <C-tab> <C-w><C-w>
 
 """ Tab mappings
 nnoremap <silent> <C-g> :tabnew<CR>
@@ -92,22 +89,19 @@ cabbrev shell Shell
 
 " My tab mappings
 function! TabMappings()
-
-  if pumvisible()
-    return "\<C-n>"
-  elseif &ft == 'c'
-    return "\<C-X>\<C-U>"
-  elseif &ft == 'c++'
-    return "\<C-X>\<C-U>"
-  elseif &ft == 'objc'
-    return "\<C-X>\<C-U>"
-  elseif &ft == 'objcpp'
-    return "\<C-X>\<C-U>"
-  elseif neocomplcache#sources#snippets_complete#expandable()
-    return "\<Plug>(neocomplcache_snippets_expand)"
-  else
-    return "\<TAB>"
-  endif
+    if pumvisible()
+        return "\<C-n>"
+    elseif &ft == 'c'
+        return "\<C-X>\<C-U>"
+    elseif &ft == 'c++'
+        return "\<C-X>\<C-U>"
+    elseif &ft == 'objc'
+        return "\<C-X>\<C-U>"
+    elseif &ft == 'objcpp'
+        return "\<C-X>\<C-U>"
+    " elseif neocomplcache#sources#snippets_complete#expandable()
+        " return "\<Plug>(neocomplcache_snippets_expand)"
+    endif
 endfunction
 
 imap <expr><TAB> TabMappings()
