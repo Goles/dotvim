@@ -31,8 +31,6 @@ noremap <c-]> <Esc>:bn<CR>
 map <leader>s :s/\s\+$//g<CR>
 
 "" Map escape key to kj
-inoremap kj <Esc>
-inoremap tn <Esc>
 inoremap lh <Esc>
 
 "" Disable the arrow keys! :D

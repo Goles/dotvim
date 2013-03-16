@@ -7,7 +7,7 @@ It's based on the work of {Ben Bleything}[https://github.com/bleything/dotvim], 
 
 Pretty straightforward.  Clone and symlink:
 
-  $ git clone git://github.com/bleything/dotvim.git ~/.vim
+  $ git clone git://github.com/goles/dotvim.git ~/.vim
   $ ln -s ~/.vim/vimrc ~/.vimrc
 
 ** You must perform a Rake update to download the bundles **
@@ -17,32 +17,6 @@ Pretty straightforward.  Clone and symlink:
 == What's Inside?!
 
 * My own personal settings, mainly to work with Rails and now Objective-C (iOS).
-
-Also, some plugins:
-
-* {Pathogen}[http://www.vim.org/scripts/script.php?script_id=2332]
-* {Ctrl-P}[git://github.com/kien/ctrlp.vim.git]
-* {Neocomplcache}[git://github.com/Shougo/neocomplcache.git]
-* {Vim-Autoclose}[git://github.com/Townk/vim-autoclose.git]
-* {Surround}[git://github.com/tpope/vim-surround.git]
-* {Clang Complete}[git://github.com/Goles/Clang_Complete-Pathogen.git]
-* {ack}[http://www.vim.org/scripts/script.php?script_id=2572]
-* {CSS Color}[https://github.com/ap/vim-css-color]
-* {NERD Commenter}[http://www.vim.org/scripts/script.php?script_id=1218]
-* {Rails}[http://www.vim.org/scripts/script.php?script_id=1567]
-
-Aaaaaalso, some syntax definitions:
-
-* {Git}[http://www.vim.org/scripts/script.php?script_id=1654]
-* {HAML/SASS}[http://www.vim.org/scripts/script.php?script_id=1433]
-* {JSON}[http://www.vim.org/scripts/script.php?script_id=1945]
-* {Markdown}[http://github.com/ujihisa/vim-markdown]
-* {RDoc}[http://www.vim.org/scripts/script.php?script_id=2878]
-* {Scala}[https://github.com/derekwyatt/vim-scala]
-* {Slidedown}[http://www.vim.org/scripts/script.php?script_id=3069]
-* {Textile}[http://www.vim.org/scripts/script.php?script_id=2305]
-* {VCL}[https://github.com/smerrill/vcl-vim-plugin]
-* {Coffee Script}[git://github.com/kchmck/vim-coffee-script.git]
 
 == Credits
 

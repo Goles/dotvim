@@ -27,7 +27,7 @@ map <leader>a, :Tabularize /=>\?<cr>
 
 " For ctrl p remap
 let g:ctrlp_map = "<leader>;"
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.plist,*.o,*.d,*.dia,*/build/*,*/*.framework/*
+set wildignore+=*/Libraries/*,*/tmp/*,*.so,*.swp,*.zip,*.plist,*.o,*.d,*.dia,*/build/*,*/*.framework/*
 
 """ ack
 map <leader>ack :Ack

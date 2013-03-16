@@ -26,7 +26,7 @@ source $HOME/.vim/filetypes
 
 syntax enable
 set background=light
-colorscheme Tomorrow-Night-Eighties
+colorscheme jellybeans
 set clipboard=unnamed
 
 "" Switch between Dark and bright
