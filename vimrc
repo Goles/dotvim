@@ -15,7 +15,7 @@
 """
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " load up everything in ~/.vim/bundle using pathogen.vim
-call pathogen#runtime_append_all_bundles()
+call pathogen#incubate()
 
 source $HOME/.vim/basic
 source $HOME/.vim/bindings

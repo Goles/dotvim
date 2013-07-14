@@ -29,13 +29,13 @@ set hidden       " enable hidden buffers so that vim doesn't prompt for unsaved 
 set cpoptions=aABceFsWZ
 
 "" Enable syntax
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS 
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags 
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 
 "" Show me the whitespace
 set list
-set listchars=trail:·
+set listchars=trail:~
 autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
 autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
 highlight EOLWS ctermbg=red guibg=red
