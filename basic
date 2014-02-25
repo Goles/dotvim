@@ -11,6 +11,10 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ B A S I C   O P T I O N S
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"Tab-width for other langs
+autocmd Filetype ruby setlocal ts=2 sts=2 sw=2
+
 set nocompatible " to hell with vi compatibility!
 set wildmenu     " fancy command completion menu!
 set modelines=1  " enable modelines

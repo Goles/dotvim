@@ -22,6 +22,8 @@ clang_complete-jumpto_declaration_key	clang_complete.txt	/*clang_complete-jumpto
 clang_complete-keybindings	clang_complete.txt	/*clang_complete-keybindings*
 clang_complete-library_path	clang_complete.txt	/*clang_complete-library_path*
 clang_complete-license	clang_complete.txt	/*clang_complete-license*
+clang_complete-loaded	clang_complete.txt	/*clang_complete-loaded*
+clang_complete-make_default_keymappings	clang_complete.txt	/*clang_complete-make_default_keymappings*
 clang_complete-options	clang_complete.txt	/*clang_complete-options*
 clang_complete-periodic_quickfix	clang_complete.txt	/*clang_complete-periodic_quickfix*
 clang_complete-snippets	clang_complete.txt	/*clang_complete-snippets*
@@ -37,6 +39,7 @@ g:clang_close_preview	clang_complete.txt	/*g:clang_close_preview*
 g:clang_compilation_database	clang_complete.txt	/*g:clang_compilation_database*
 g:clang_complete_auto	clang_complete.txt	/*g:clang_complete_auto*
 g:clang_complete_copen	clang_complete.txt	/*g:clang_complete_copen*
+g:clang_complete_loaded	clang_complete.txt	/*g:clang_complete_loaded*
 g:clang_complete_macros	clang_complete.txt	/*g:clang_complete_macros*
 g:clang_complete_patterns	clang_complete.txt	/*g:clang_complete_patterns*
 g:clang_conceal_snippets	clang_complete.txt	/*g:clang_conceal_snippets*
@@ -44,6 +47,7 @@ g:clang_hl_errors	clang_complete.txt	/*g:clang_hl_errors*
 g:clang_jumpto_back_key	clang_complete.txt	/*g:clang_jumpto_back_key*
 g:clang_jumpto_declaration_key	clang_complete.txt	/*g:clang_jumpto_declaration_key*
 g:clang_library_path	clang_complete.txt	/*g:clang_library_path*
+g:clang_make_default_keymappings	clang_complete.txt	/*g:clang_make_default_keymappings*
 g:clang_periodic_quickfix	clang_complete.txt	/*g:clang_periodic_quickfix*
 g:clang_snippets	clang_complete.txt	/*g:clang_snippets*
 g:clang_snippets_engine	clang_complete.txt	/*g:clang_snippets_engine*

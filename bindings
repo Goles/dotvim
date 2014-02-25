@@ -37,14 +37,14 @@ map <leader>s :s/\s\+$//g<CR>
 inoremap lh <Esc>
 
 "" Disable the arrow keys! :D
-noremap  <Up> ""
-noremap! <Up> <Esc>
-noremap  <Down> ""
-noremap! <Down> <Esc>
-noremap  <Left> ""
-noremap! <Left> <Esc>
-noremap  <Right> ""
-noremap! <Right> <Esc>
+" noremap  <Up> ""
+" noremap! <Up> <Esc>
+" noremap  <Down> ""
+" noremap! <Down> <Esc>
+" noremap  <Left> ""
+" noremap! <Left> <Esc>
+" noremap  <Right> ""
+" noremap! <Right> <Esc>
 
 """ Tab mappings
 nnoremap <silent> <C-g> :tabnew<CR>

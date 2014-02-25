@@ -57,7 +57,7 @@ def initClangComplete(clang_complete_flags, clang_compilation_database, \
 
   debug = int(vim.eval("g:clang_debug")) == 1
 
-  if library_path != "":
+  if library_path:
     Config.set_library_path(library_path)
 
   Config.set_compatibility_check(False)
@@ -65,11 +65,19 @@ def initClangComplete(clang_complete_flags, clang_compilation_database, \
   try:
     index = Index.create()
   except Exception, e:
-    print "Loading libclang failed, completion won't be available"
-    if library_path == "":
-      print "Consider setting g:clang_library_path"
+    if library_path:
+      suggestion = "Are you sure '%s' contains libclang?" % library_path
     else:
-      print "Are you sure '%s' contains libclang?" % library_path
+      suggestion = "Consider setting g:clang_library_path."
+
+    if debug:
+      exception_msg = str(e)
+    else:
+      exception_msg = ''
+
+    print '''Loading libclang failed, completion won't be available. %s
+    %s
+    ''' % (suggestion, exception_msg)
     return 0
 
   global builtinHeaderPath
@@ -422,8 +430,8 @@ class CompleteThread(threading.Thread):
     self.timer = timer
 
   def run(self):
-    with workingDir(self.cwd):
-      with libclangLock:
+    with libclangLock:
+      with workingDir(self.cwd):
         if self.line == -1:
           # Warm up the caches. For this it is sufficient to get the
           # current translation unit. No need to retrieve completion
@@ -522,8 +530,8 @@ def gotoDeclaration():
   line, col = vim.current.window.cursor
   timer = CodeCompleteTimer(debug, vim.current.buffer.name, line, col, params)
 
-  with workingDir(params['cwd']):
-    with libclangLock:
+  with libclangLock:
+    with workingDir(params['cwd']):
       tu = getCurrentTranslationUnit(params['args'], getCurrentFile(),
                                      vim.current.buffer.name, timer,
                                      update = True)
@@ -539,8 +547,9 @@ def gotoDeclaration():
       for d in defs:
         if d is not None and loc != d.location:
           loc = d.location
-          jumpToLocation(loc.file.name, loc.line, loc.column)
-          break
+          if loc.file is not None:
+            jumpToLocation(loc.file.name, loc.line, loc.column)
+            break
 
   timer.finish()
 

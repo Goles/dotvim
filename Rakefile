@@ -37,9 +37,9 @@ namespace :update do
     # :clang_complete => "git://github.com/Rip-Rip/clang_complete.git", #official branch
     # :YouCompleteMe => "git://github.com/Valloric/YouCompleteMe.git",
 
-    :objcbracket => "git://github.com/Goles/objcbracket.vim.git",
-    :cocoa_vim => "git://github.com/markschabacker/cocoa.vim.git",
-    :vim_ios => "git://github.com/eraserhd/vim-ios.git"
+    # :objcbracket => "git://github.com/Goles/objcbracket.vim.git",
+    # :cocoa_vim => "git://github.com/markschabacker/cocoa.vim.git",
+    # :vim_ios => "git://github.com/eraserhd/vim-ios.git"
 
     # For completion
     # :neocomplcache => "git://github.com/Shougo/neocomplcache.git",
