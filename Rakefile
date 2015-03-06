@@ -22,7 +22,7 @@ task :update => [ 'update:bundles' ]
 namespace :update do
 
   BUNDLES = {
-    # plugins
+    # general plugins
     :ack           => "http://www.vim.org/scripts/download_script.php?src_id=10433",
     :nerdcommenter => "git://github.com/scrooloose/nerdcommenter.git",
     :autopair => "git://github.com/jiangmiao/auto-pairs.git",
@@ -31,6 +31,10 @@ namespace :update do
     :vim_markdown => "git@github.com:plasticboy/vim-markdown.git",
     :minibufexpl => "git://github.com/fholgado/minibufexpl.vim.git",
     :gitgutter => "git://github.com/airblade/vim-gitgutter.git",
+
+    #node.js
+    :vim_javascript => "git@github.com:pangloss/vim-javascript.git",
+    :syntastic => "git@github.com:scrooloose/syntastic.git",
 
     # This is for Objective-C Coding
     # :clang_complete => "git://github.com/Goles/Clang_Complete-Pathogen.git", #crazy branch

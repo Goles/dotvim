@@ -34,6 +34,9 @@ map <leader>ack :Ack
 map <leader>an :cn<cr>
 map <leader>ap :cp<cr>
 
+" Syntastic
+let g:syntastic_javascript_checkers = ['jshint']
+
 " add neocomplcache option
 let g:neocomplcache_force_overwrite_completefunc=1
 
