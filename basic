@@ -55,5 +55,9 @@ else
 endif
 
 "" Basic definitions for clang
-let g:clang_use_library=1
-let g:clang_library_path ='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib'
+"" let g:clang_use_library=1
+"" let g:clang_library_path ='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib'
+
+
+"" Trim lines in git commits at 72 characters
+filetype indent on
